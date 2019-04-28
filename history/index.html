@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+
+    <!-- Bootstrap CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <title>window history示例</title>
+</head>
+<body>
+<div id="app">
+    <div class="container">
+        <div class="p-3">
+            <h3>列表测试</h3>
+            <hr>
+            <ul class="list-group" id="scoll">
+
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+    var page = 1;
+    var html = '';
+
+    $(document).ready(function () {
+        init();
+    });
+
+    function init() {
+
+        var cacheData = sessionStorage.getItem("orderData");
+        var scrollTop = sessionStorage.getItem("scrollTop");
+        var _page      = sessionStorage.getItem("page");
+       	
+       	console.log(cacheData, scrollTop, _page);
+       	
+        if (cacheData != "null") {
+        	html = cacheData;
+           $("#scoll").html(cacheData);
+        }
+        if (scrollTop != "null") {
+            $(document).scrollTop(scrollTop);
+        }
+
+        if (scrollTop != "null") {
+        	page = _page;
+        }
+
+        else{
+            _ajax();
+            _scroll();
+        }
+
+        sessionStorage.setItem("orderData", null);
+	    sessionStorage.setItem("scrollTop", null);
+	    sessionStorage.setItem("page", null);
+    }
+
+    //模拟网络请求
+    function _ajax() {
+    	console.log(page);
+    	flag = false;
+        _page = page - 1;
+        var str = '';
+        for (var i = 1; i <= 15; i++) {
+            str += '<li onclick="openUrl()" class="list-group-item link">第' + (_page * 15 + i) + '条数据</li>';
+        }
+        html += str;
+        console.log(str);
+        $("#scoll").append(str); 
+        flag = true;
+    }
+
+    //滚动监听
+    function _scroll()
+    {
+    	$(document).scroll(function () {
+            var sHeight = $(document).scrollTop();
+            var windowHeight = document.body.clientHeight;
+            var documentHeight = $(document).height();
+            if (sHeight >= documentHeight - windowHeight) {
+                if ( page < 5 ) {
+                	page++;
+                    _ajax();
+                }
+            }
+        });
+    }
+
+    //页面跳转
+    function openUrl(){
+    	console.log(html);
+	    sessionStorage.setItem("orderData", html);
+	    sessionStorage.setItem("scrollTop", $(document).scrollTop());
+	    sessionStorage.setItem("page", page);
+	    window.location.href = "detail.html";
+    }
+
+</script>
+</body>
+</html>

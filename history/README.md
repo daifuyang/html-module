@@ -1,5 +1,3 @@
-# html-module
-常见HTML模块
 ## <a href="">html-history</a>
 浏览器返回上一页保持页面数据不变</br>
 #### 问题描述
